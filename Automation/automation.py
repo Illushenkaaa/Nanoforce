@@ -25,8 +25,10 @@ def clean():
 
 
 def format_all_files():
-    files = glob.glob("Engine/Source/**/*.h", root_dir=ROOT_DIR, recursive=True)
-    files += glob.glob("Engine/Source/**/*.cpp", root_dir=ROOT_DIR, recursive=True)
+    files = glob.glob("Engine/**/*.h", root_dir=ROOT_DIR, recursive=True)
+    files += glob.glob("Engine/**/*.cpp", root_dir=ROOT_DIR, recursive=True)
+    files += glob.glob("Sandbox/**/*.h", root_dir=ROOT_DIR, recursive=True)
+    files += glob.glob("Sandbox/**/*.cpp", root_dir=ROOT_DIR, recursive=True)
     run(["clang-format", "-i", "--style=file:Automation/.clang-format", *files])
 
 

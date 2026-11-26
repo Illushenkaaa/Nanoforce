@@ -15,6 +15,7 @@ set(CMAKE_SUPPRESS_REGENERATION TRUE)
 include(${CMAKE_SOURCE_DIR}/Automation/CMAKE/CMakeHelpers.cmake)
 
 add_subdirectory(Engine)
+add_subdirectory(Sandbox)
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT NanoforceEngine)
 
 system_info()
