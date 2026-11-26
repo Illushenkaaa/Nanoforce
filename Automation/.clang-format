@@ -1,0 +1,37 @@
+BasedOnStyle: Microsoft
+IndentWidth: 4
+UseTab: Never
+TabWidth: 4
+ColumnLimit: 140
+BreakBeforeBraces: Allman
+AccessModifierOffset: -4
+IndentCaseLabels: true
+PointerAlignment: Left
+SortIncludes: false
+
+AlignAfterOpenBracket: Align
+AlignArrayOfStructures: Left
+AlignOperands: Align
+AlignEscapedNewlines: Left
+AlignConsecutiveMacros: Consecutive
+AlignConsecutiveBitFields: Consecutive
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AlignFunctionDeclarations: true
+  AlignFunctionPointers: true
+AlignConsecutiveShortCaseStatements:
+  Enabled: true
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 1
+SpacesBeforeTrailingComments: 2
+
+BinPackParameters: OnePerLine
+AllowAllParametersOfDeclarationOnNextLine: false
+AlwaysBreakTemplateDeclarations: Yes
+
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
