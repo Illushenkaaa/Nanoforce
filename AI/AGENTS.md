@@ -13,8 +13,9 @@ Long term: maybe a Nanite-like renderer, or simply a convenient playground for e
    Proceed without waiting only when the user explicitly says so.
 2. No tests: we do not write tests in this project.
 3. Commit messages: as short as possible, a single line, e.g. `Add log`.
-   Commits made by the agent end with a `Co-Authored-By: Claude ...` trailer.
-4. When the user asks to explain code: first give a short code example, then walk through that example step by step in plain, simple words.
+   Commits made by the agent end with agents name trailer.
+4. When the user asks to explain code: first give a short code example, then walk through that example step by step in plain, simple words. 
+   Be ready to create a note for obsidian.
 5. Explanation style: short and to the point, the way the user talks.
    State the core rule in 1–3 plain sentences, confirm or correct the user's understanding directly,
    add one small example only if needed, and stop. No tables, sections or extra terms unless asked.
@@ -26,6 +27,16 @@ Long term: maybe a Nanite-like renderer, or simply a convenient playground for e
 3. All constructors are `explicit`, for every class.
 4. Use `[[nodiscard]]` wherever possible (getters, functions whose result must not be ignored),
    and other attributes (`[[noreturn]]`, `[[maybe_unused]]`, `[[likely]]`/`[[unlikely]]`, `[[fallthrough]]`) where they fit.
+
+## Obsidian Notes
+
+Vault by default: `C:\Users\user\Documents\Obsidian`, one topic per note, grouped in subfolders (e.g. `C++\Concepts.md`).
+
+1. Write a note only after the user confirms they understood the topic.
+2. Notes are written in English.
+3. Structure: `## Theory` first — each definition stated once, as short bullets;
+   then `## Code` — examples only, no repeated definitions, no step-by-step walkthroughs.
+4. The user edits notes by hand: always read a note before changing it and keep their edits.
 
 ## Skills
 

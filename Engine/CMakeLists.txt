@@ -10,6 +10,8 @@ set(ENGINE_SOURCES
     Source/Core/Filesystem.cpp
     Source/Core/Types.h
     Source/Core/Utility.h
+    Source/Event/Event.h
+    Source/Event/InputEvent.h
     Source/Log/Log.h
     Source/Log/Log.cpp
 )
