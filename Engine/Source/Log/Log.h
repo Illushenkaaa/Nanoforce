@@ -40,10 +40,10 @@ public:
     // core
     [[nodiscard]] static Log& getInstance();
 
-    void log(const LogCategory&          category,   //
-             LogVerbosity                verbosity,  //
-             std::string_view            message,    //
-             const std::source_location& location) const;
+    void log(const LogCategory&     category,   //
+        LogVerbosity                verbosity,  //
+        std::string_view            message,    //
+        const std::source_location& location) const;
 
 private:
     explicit Log();
@@ -81,5 +81,5 @@ concept ValidLogCategory = std::constructible_from<LogCategory, T>;
         static_assert(Nanoforce::ValidLogVerbosity<Nanoforce::LogVerbosity::verbosity>, "Verbosity must be between Log and Fatal");      \
         static_assert(Nanoforce::LoggableMessage<decltype(formatString)>, "Message must be convertible to string");                      \
         Nanoforce::Log::getInstance().log(categoryName, Nanoforce::LogVerbosity::verbosity,                                              \
-                                          std::format(formatString __VA_OPT__(, ) __VA_ARGS__), std::source_location::current());        \
+            std::format(formatString __VA_OPT__(, ) __VA_ARGS__), std::source_location::current());                                      \
     } while (0)

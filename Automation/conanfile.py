@@ -7,3 +7,4 @@ class NanoforceConan(ConanFile):
 
     def requirements(self):
         self.requires("spdlog/1.16.0")
+        self.requires("glfw/3.4")

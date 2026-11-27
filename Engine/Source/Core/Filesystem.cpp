@@ -1,7 +1,5 @@
 #include "Core/Filesystem.h"
 
-#include <filesystem>
-
 namespace Nanoforce
 {
 

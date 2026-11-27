@@ -41,12 +41,20 @@ public:
     template <typename ObjType, typename RetType>
     [[nodiscard]] EventHandle add(ObjType* obj, RetType (ObjType::*method)(Args...))
     {
-        return add([obj, method](Args... args) { (obj->*method)(args...); });
+        return add(
+            [obj, method](Args... args)
+            {
+                (obj->*method)(args...);
+            });
     }
 
     void remove(EventHandle handle)
     {
-        std::erase_if(m_subscribers, [handle](const auto& pair) { return pair.first == handle; });
+        std::erase_if(m_subscribers,
+            [handle](const auto& pair)
+            {
+                return pair.first == handle;
+            });
     }
 
     void invoke(Args... args) const
@@ -59,7 +67,7 @@ public:
 
 private:
     std::vector<std::pair<EventHandle, Subscriber>> m_subscribers;
-    uint64 m_nextHandleId{0};
+    uint64                                          m_nextHandleId{0};
 };
 
 }  // namespace Nanoforce

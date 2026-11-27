@@ -9,7 +9,7 @@ IndentCaseLabels: true
 PointerAlignment: Left
 SortIncludes: false
 
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: DontAlign
 AlignArrayOfStructures: Left
 AlignOperands: Align
 AlignEscapedNewlines: Left
@@ -35,3 +35,4 @@ AllowShortBlocksOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: true
+AllowShortLambdasOnASingleLine: Empty

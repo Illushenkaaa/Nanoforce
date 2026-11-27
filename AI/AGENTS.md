@@ -27,6 +27,21 @@ Long term: maybe a Nanite-like renderer, or simply a convenient playground for e
 3. All constructors are `explicit`, for every class.
 4. Use `[[nodiscard]]` wherever possible (getters, functions whose result must not be ignored),
    and other attributes (`[[noreturn]]`, `[[maybe_unused]]`, `[[likely]]`/`[[unlikely]]`, `[[fallthrough]]`) where they fit.
+5. Use `auto` widely: for local variables, iterators, lambdas and wherever the type is obvious from the right side.
+6. Own resources with smart pointers: `std::unique_ptr` by default, `std::shared_ptr` only when ownership is really shared.
+   No raw `new`/`delete`; raw pointers only as non-owning references.
+7. Split function bodies into sections with short comments: `// create main window ->`, `// finalize ->`.
+8. Lambdas passed as arguments: break after the previous argument and after the lambda signature with a trailing `//`,
+   so the body stays on its own lines:
+   ```cpp
+   glfwSetKeyCallback(m_window,                   //
+       [](GLFWwindow* window, int key, ...)       //
+       {
+           ...
+       });
+   ```
+9. Managers are created by the class that owns them (in its constructor), not passed in from outside.
+10. Don't repeat code (DRY): move repeated blocks into a separate function or method.
 
 ## Obsidian Notes
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Types.h"
+#include "Window/WindowId.h"
 
 #include <format>
 #include <string_view>
@@ -115,91 +116,49 @@ enum class MouseButtonType : uint8
     Right
 };
 
-// event data
-class WindowCloseEventData final
+// events
+struct WindowCloseEventData final
 {
-public:
-    constexpr explicit WindowCloseEventData() = default;
 };
 
-class WindowResizeEventData final
+struct WindowResizeEventData final
 {
-public:
-    constexpr explicit WindowResizeEventData(int32 width, int32 height) : m_width(width), m_height(height) {}
-
-    // getters
-    [[nodiscard]] constexpr int32 getWidth() const { return m_width; }
-    [[nodiscard]] constexpr int32 getHeight() const { return m_height; }
-
-private:
-    int32 m_width;
-    int32 m_height;
+    int32 width{0};
+    int32 height{0};
 };
 
-class KeyEventData final
+struct KeyEventData final
 {
-public:
-    constexpr explicit KeyEventData(Key key, InputAction action) : m_key(key), m_action(action) {}
-
-    // getters
-    [[nodiscard]] constexpr Key getKey() const { return m_key; }
-    [[nodiscard]] constexpr InputAction getAction() const { return m_action; }
-
-private:
-    Key m_key;
-    InputAction m_action;
+    Key         key{Key::None};
+    InputAction action{InputAction::Unknown};
 };
 
-class MouseButtonEventData final
+struct MouseButtonEventData final
 {
-public:
-    constexpr explicit MouseButtonEventData(MouseButtonType button, InputAction action) : m_button(button), m_action(action) {}
-
-    // getters
-    [[nodiscard]] constexpr MouseButtonType getButton() const { return m_button; }
-    [[nodiscard]] constexpr InputAction getAction() const { return m_action; }
-
-private:
-    MouseButtonType m_button;
-    InputAction m_action;
+    MouseButtonType button{MouseButtonType::None};
+    InputAction     action{InputAction::Unknown};
 };
 
-class MouseMoveEventData final
+struct MouseMoveEventData final
 {
-public:
-    constexpr explicit MouseMoveEventData(double x, double y) : m_x(x), m_y(y) {}
-
-    // getters
-    [[nodiscard]] constexpr double getX() const { return m_x; }
-    [[nodiscard]] constexpr double getY() const { return m_y; }
-
-private:
-    double m_x;
-    double m_y;
+    double x{0.0};
+    double y{0.0};
 };
 
-class MouseScrollEventData final
+struct MouseScrollEventData final
 {
-public:
-    constexpr explicit MouseScrollEventData(double xOffset, double yOffset) : m_xOffset(xOffset), m_yOffset(yOffset) {}
-
-    // getters
-    [[nodiscard]] constexpr double getXOffset() const { return m_xOffset; }
-    [[nodiscard]] constexpr double getYOffset() const { return m_yOffset; }
-
-private:
-    double m_xOffset;
-    double m_yOffset;
+    double xOffset{0.0};
+    double yOffset{0.0};
 };
 
 // order must match EventType
 using EventData = std::variant<std::monostate,  //
-                               WindowCloseEventData,
-                               WindowResizeEventData,
-                               KeyEventData,
-                               MouseButtonEventData,
-                               MouseMoveEventData,
-                               MouseScrollEventData>;
+    WindowCloseEventData,
+    WindowResizeEventData,
+    KeyEventData,
+    MouseButtonEventData,
+    MouseMoveEventData,
+    MouseScrollEventData>;
 
 template <EventType Type, typename Data>
 constexpr bool eventDataMatches = std::is_same_v<std::variant_alternative_t<static_cast<std::size_t>(Type), EventData>, Data>;
@@ -212,17 +171,12 @@ static_assert(eventDataMatches<EventType::MouseButton, MouseButtonEventData>);
 static_assert(eventDataMatches<EventType::MouseMove, MouseMoveEventData>);
 static_assert(eventDataMatches<EventType::MouseScroll, MouseScrollEventData>);
 
-class InputEvent final
+struct InputEvent final
 {
-public:
-    constexpr explicit InputEvent(EventData data) : m_data(data) {}
+    WindowId  windowId;
+    EventData data;
 
-    // getters
-    [[nodiscard]] constexpr const EventData& getData() const { return m_data; }
-    [[nodiscard]] constexpr EventType getType() const { return static_cast<EventType>(m_data.index()); }
-
-private:
-    EventData m_data;
+    [[nodiscard]] constexpr EventType getType() const { return static_cast<EventType>(data.index()); }
 };
 
 // to string
@@ -230,13 +184,13 @@ private:
 {
     switch (type)
     {
-        case EventType::None: return "None";
-        case EventType::WindowClose: return "WindowClose";
+        case EventType::None:         return "None";
+        case EventType::WindowClose:  return "WindowClose";
         case EventType::WindowResize: return "WindowResize";
-        case EventType::Key: return "Key";
-        case EventType::MouseButton: return "MouseButton";
-        case EventType::MouseMove: return "MouseMove";
-        case EventType::MouseScroll: return "MouseScroll";
+        case EventType::Key:          return "Key";
+        case EventType::MouseButton:  return "MouseButton";
+        case EventType::MouseMove:    return "MouseMove";
+        case EventType::MouseScroll:  return "MouseScroll";
     }
     return "Unknown";
 }
@@ -247,8 +201,8 @@ private:
     {
         case InputAction::Unknown: return "Unknown";
         case InputAction::Release: return "Release";
-        case InputAction::Press: return "Press";
-        case InputAction::Repeat: return "Repeat";
+        case InputAction::Press:   return "Press";
+        case InputAction::Repeat:  return "Repeat";
     }
     return "Unknown";
 }
@@ -257,10 +211,10 @@ private:
 {
     switch (button)
     {
-        case MouseButtonType::None: return "None";
-        case MouseButtonType::Left: return "Left";
+        case MouseButtonType::None:   return "None";
+        case MouseButtonType::Left:   return "Left";
         case MouseButtonType::Middle: return "Middle";
-        case MouseButtonType::Right: return "Right";
+        case MouseButtonType::Right:  return "Right";
     }
     return "Unknown";
 }
@@ -269,72 +223,72 @@ private:
 {
     switch (key)
     {
-        case Key::None: return "None";
-        case Key::Unknown: return "Unknown";
-        case Key::Esc: return "Esc";
-        case Key::Enter: return "Enter";
-        case Key::Space: return "Space";
-        case Key::Tab: return "Tab";
-        case Key::Backspace: return "Backspace";
-        case Key::Up: return "Up";
-        case Key::Down: return "Down";
-        case Key::Left: return "Left";
-        case Key::Right: return "Right";
-        case Key::Key0: return "Key0";
-        case Key::Key1: return "Key1";
-        case Key::Key2: return "Key2";
-        case Key::Key3: return "Key3";
-        case Key::Key4: return "Key4";
-        case Key::Key5: return "Key5";
-        case Key::Key6: return "Key6";
-        case Key::Key7: return "Key7";
-        case Key::Key8: return "Key8";
-        case Key::Key9: return "Key9";
-        case Key::KeyA: return "KeyA";
-        case Key::KeyB: return "KeyB";
-        case Key::KeyC: return "KeyC";
-        case Key::KeyD: return "KeyD";
-        case Key::KeyE: return "KeyE";
-        case Key::KeyF: return "KeyF";
-        case Key::KeyG: return "KeyG";
-        case Key::KeyH: return "KeyH";
-        case Key::KeyI: return "KeyI";
-        case Key::KeyJ: return "KeyJ";
-        case Key::KeyK: return "KeyK";
-        case Key::KeyL: return "KeyL";
-        case Key::KeyM: return "KeyM";
-        case Key::KeyN: return "KeyN";
-        case Key::KeyO: return "KeyO";
-        case Key::KeyP: return "KeyP";
-        case Key::KeyQ: return "KeyQ";
-        case Key::KeyR: return "KeyR";
-        case Key::KeyS: return "KeyS";
-        case Key::KeyT: return "KeyT";
-        case Key::KeyU: return "KeyU";
-        case Key::KeyV: return "KeyV";
-        case Key::KeyW: return "KeyW";
-        case Key::KeyX: return "KeyX";
-        case Key::KeyY: return "KeyY";
-        case Key::KeyZ: return "KeyZ";
-        case Key::F1: return "F1";
-        case Key::F2: return "F2";
-        case Key::F3: return "F3";
-        case Key::F4: return "F4";
-        case Key::F5: return "F5";
-        case Key::F6: return "F6";
-        case Key::F7: return "F7";
-        case Key::F8: return "F8";
-        case Key::F9: return "F9";
-        case Key::F10: return "F10";
-        case Key::F11: return "F11";
-        case Key::F12: return "F12";
-        case Key::LeftShift: return "LeftShift";
+        case Key::None:       return "None";
+        case Key::Unknown:    return "Unknown";
+        case Key::Esc:        return "Esc";
+        case Key::Enter:      return "Enter";
+        case Key::Space:      return "Space";
+        case Key::Tab:        return "Tab";
+        case Key::Backspace:  return "Backspace";
+        case Key::Up:         return "Up";
+        case Key::Down:       return "Down";
+        case Key::Left:       return "Left";
+        case Key::Right:      return "Right";
+        case Key::Key0:       return "Key0";
+        case Key::Key1:       return "Key1";
+        case Key::Key2:       return "Key2";
+        case Key::Key3:       return "Key3";
+        case Key::Key4:       return "Key4";
+        case Key::Key5:       return "Key5";
+        case Key::Key6:       return "Key6";
+        case Key::Key7:       return "Key7";
+        case Key::Key8:       return "Key8";
+        case Key::Key9:       return "Key9";
+        case Key::KeyA:       return "KeyA";
+        case Key::KeyB:       return "KeyB";
+        case Key::KeyC:       return "KeyC";
+        case Key::KeyD:       return "KeyD";
+        case Key::KeyE:       return "KeyE";
+        case Key::KeyF:       return "KeyF";
+        case Key::KeyG:       return "KeyG";
+        case Key::KeyH:       return "KeyH";
+        case Key::KeyI:       return "KeyI";
+        case Key::KeyJ:       return "KeyJ";
+        case Key::KeyK:       return "KeyK";
+        case Key::KeyL:       return "KeyL";
+        case Key::KeyM:       return "KeyM";
+        case Key::KeyN:       return "KeyN";
+        case Key::KeyO:       return "KeyO";
+        case Key::KeyP:       return "KeyP";
+        case Key::KeyQ:       return "KeyQ";
+        case Key::KeyR:       return "KeyR";
+        case Key::KeyS:       return "KeyS";
+        case Key::KeyT:       return "KeyT";
+        case Key::KeyU:       return "KeyU";
+        case Key::KeyV:       return "KeyV";
+        case Key::KeyW:       return "KeyW";
+        case Key::KeyX:       return "KeyX";
+        case Key::KeyY:       return "KeyY";
+        case Key::KeyZ:       return "KeyZ";
+        case Key::F1:         return "F1";
+        case Key::F2:         return "F2";
+        case Key::F3:         return "F3";
+        case Key::F4:         return "F4";
+        case Key::F5:         return "F5";
+        case Key::F6:         return "F6";
+        case Key::F7:         return "F7";
+        case Key::F8:         return "F8";
+        case Key::F9:         return "F9";
+        case Key::F10:        return "F10";
+        case Key::F11:        return "F11";
+        case Key::F12:        return "F12";
+        case Key::LeftShift:  return "LeftShift";
         case Key::RightShift: return "RightShift";
-        case Key::LeftCtrl: return "LeftCtrl";
-        case Key::RightCtrl: return "RightCtrl";
-        case Key::LeftAlt: return "LeftAlt";
-        case Key::RightAlt: return "RightAlt";
-        case Key::Count: break;
+        case Key::LeftCtrl:   return "LeftCtrl";
+        case Key::RightCtrl:  return "RightCtrl";
+        case Key::LeftAlt:    return "LeftAlt";
+        case Key::RightAlt:   return "RightAlt";
+        case Key::Count:      break;
     }
     return "Unknown";
 }
